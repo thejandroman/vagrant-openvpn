@@ -1,6 +1,3 @@
 .DS_Store
 .vagrant/
-client_certs/ca.crt
-client_certs/client.ovpn
-client_certs/client1.crt
-client_certs/client1.key
+client_certs/
