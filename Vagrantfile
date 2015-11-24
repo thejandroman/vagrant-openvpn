@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box               = 'digital_ocean'
     override.vm.box_url           = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
 
-    provider.image        = '13089493'
+    provider.image        = '14530089'
     provider.name         = 'openvpn'
     provider.region       = REGION
     provider.ssh_key_name = 'vagrant'
