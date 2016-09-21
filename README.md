@@ -1,9 +1,15 @@
 # Introduction
 
-This vagrantfile spins up an Ubuntu 14.04 x86 droplet in
-DigitalOcean's cloud. It then configures the droplet using ssh
-provisioners to serve as an OpenVPN server. Finally it creates an ovpn
-client config file for easy importing into an OpenVPN client.
+This project is meant to quickly spin up an optimally configured
+OpenVPN server with downloadable, sane client configs. It performs the
+following functions:
+
+1. This vagrantfile spins up an Ubuntu 16.04 x86 droplet in
+DigitalOcean's cloud.
+1. It then configures the droplet using ssh provisioners to serve as
+an OpenVPN server.
+1. Finally it creates an ovpn client config file for easy importing
+into an OpenVPN client.
 
 # Prerequisites
 
