@@ -1,43 +1,46 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Number of client OVPN config files to create
-CLIENTS = 1
-# Force deletion and recreation of openvpn client configs
-FORCE = false
-# DigitalOcean region in which to create the server instance. A list
-# of regions and their current status can be found at
-# https://status.digitalocean.com/.
-REGION = 'nyc3'.freeze
-# Size of the server instance. This setting directly correlates with
-# the memory size at https://www.digitalocean.com/pricing/.
-#
-# WARNING: Changing this value will have a direct effect on the fees
-# paid to DigitalOcean.
-SIZE = '512mb'.freeze
-# Path to the local ssh key
-SSH_KEY = '~/.ssh/id_rsa'.freeze
-# The path to the file containing the DigitalOcean access token. Can
-# also be the access token itself.
-TOKEN = File.read("#{Dir.home}/.do").chomp
+require 'yaml'
 
-VAGRANTFILE_API_VERSION = '2'
+vagrant_config = YAML.load_file('./config.yaml')
+PROVIDER       = vagrant_config['provider'].to_sym
+CLIENTS        = vagrant_config['clients']
+FORCE          = vagrant_config['force']
+SSH_KEY        = vagrant_config['ssh_private_key']
+
+VAGRANTFILE_API_VERSION = '2'.freeze
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.define 'openvpn' do |droplet_name|
-    droplet_name.vm.hostname = 'openvpn'
+  config.vm.define 'openvpn' do |name|
+    name.vm.hostname = 'openvpn'
   end
 
-  config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = SSH_KEY
-    override.vm.box               = 'digital_ocean'
-    override.vm.box_url           = 'https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+  case PROVIDER
+  when :digital_ocean
+    REGION       = vagrant_config['do_region']
+    SIZE         = vagrant_config['do_size']
+    SSH_KEY_NAME = vagrant_config['do_ssh_key_name']
 
-    provider.image        = 'ubuntu-16-04-x64'
-    provider.name         = 'openvpn'
-    provider.region       = REGION
-    provider.ssh_key_name = 'vagrant'
-    provider.size         = SIZE
-    provider.token        = TOKEN
+    if vagrant_config['do_token']
+      TOKEN = vagrant_config['do_token']
+    else
+      TOKEN = File.read(File.expand_path(vagrant_config['do_token_file'])).chomp
+    end
+
+    config.vm.provider PROVIDER do |provider, override|
+      override.ssh.private_key_path = SSH_KEY
+      override.vm.box               = 'digital_ocean'
+      override.vm.box_url           = 'https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+
+      provider.image        = 'ubuntu-16-04-x64'
+      provider.name         = 'openvpn'
+      provider.region       = REGION
+      provider.ssh_key_name = SSH_KEY_NAME
+      provider.size         = SIZE
+      provider.token        = TOKEN
+    end
+  else
+    abort('Unsupported provider')
   end
 
   config.vm.synced_folder '.', '/vagrant',
