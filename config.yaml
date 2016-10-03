@@ -1,0 +1,37 @@
+---
+# Vagrant provider. Currently only supports digital_ocean
+provider: digital_ocean
+
+# Number of client OVPN config files to create
+clients: 2
+
+# Force deletion and recreation of openvpn client configs
+force: true
+
+# Path to the local ssh private key
+ssh_private_key: ~/.ssh/id_rsa
+
+### DIGITAL OCEAN SPECIFIC SETTINGS
+# DigitalOcean region in which to create the server instance. A list
+# of regions and their current status can be found at
+# https://status.digitalocean.com/.
+do_region: nyc3
+
+# Size of the server instance. This setting directly correlates with
+# the memory size at https://www.digitalocean.com/pricing/.
+#
+# WARNING: Changing this value will have a direct effect on the fees
+# paid to DigitalOcean.
+do_size: 512mb
+
+# The name to use when creating a DigitalOcean SSH key for Droplet
+# authentication
+do_ssh_key_name: vagrant
+
+# The digital ocean token. This can be acquired at
+# https://cloud.digitalocean.com/settings/api/tokens. Alternatively
+# the path to a one line file containing the access token can be
+# provided using the do_token_file key. The do_token key will always
+# take precedence over the do_token_file key.
+do_token: 1234567890abcdef
+#do_token_file: ~/.do
