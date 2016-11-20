@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Basic travis testing using rubocop and shellcheck
+
 ### Changed
 - moved config options from Vagrantfile to new config.yaml
 - Retrieving the IP from metadata can now be extended with multiple clouds
