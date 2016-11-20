@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - moved config options from Vagrantfile to new config.yaml
+- Retrieving the IP from metadata can now be extended with multiple clouds
 
 ## [16.04-1.0.0]
 ### Changed

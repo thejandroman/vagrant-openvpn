@@ -7,6 +7,7 @@ KEY_DIR="${RSA_DIR}/keys"
 
 prep_rsa() {
     cd "${RSA_DIR}" || exit
+    # shellcheck disable=SC1091
     . ./vars
 }
 
