@@ -17,7 +17,21 @@ while getopts ":c:f" opt; do
 done
 shift $((OPTIND-1))
 
-IPADDR=$(curl -s http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
+ipaddr() {
+    URLS=( http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address )
+
+    for i in "${URLS[@]}"; do
+        status_code=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' "${i}")
+        if [ "${status_code}" -ne '404' ]; then
+            ip_addr=$(curl -s "${i}")
+            break
+        fi
+    done
+
+    echo "${ip_addr}"
+}
+
+IPADDR=$(ipaddr)
 RSA_DIR='/root/openvpn-ca'
 KEY_DIR="${RSA_DIR}/keys"
 CLIENT_CONFIGS='/vagrant/client-configs'
