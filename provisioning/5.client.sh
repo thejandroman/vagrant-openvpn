@@ -38,6 +38,7 @@ CLIENT_CONFIGS='/vagrant/client-configs'
 
 prep_rsa() {
     cd "${RSA_DIR}" || exit
+    # shellcheck disable=SC1091
     . ./vars
 }
 
