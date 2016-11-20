@@ -39,6 +39,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       provider.size         = SIZE
       provider.token        = TOKEN
     end
+  when :aws
+    config.vm.provider PROVIDER do |provider, override|
+      override.ssh.private_key_path = SSH_KEY
+      override.ssh.username         = 'ubuntu'
+      override.vm.box               = 'aws'
+      override.vm.box_url           = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+      provider.access_key_id     = 'ACCESS_KEY_ID'
+      provider.ami               = 'ami-844e0bf7'
+      provider.instance_type     = 't2.nano'
+      provider.keypair_name      = 'vagrant'
+      provider.region            = 'eu-west-1'
+      provider.secret_access_key = 'SECRET_ACCESS_KEY'
+      provider.security_groups   = ['SSH Access', 'VPN Access']
+    end
   else
     abort('Unsupported provider')
   end
