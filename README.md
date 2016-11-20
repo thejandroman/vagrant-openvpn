@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thejandroman/vagrant-openvpn.svg?branch=travis)](https://travis-ci.org/thejandroman/vagrant-openvpn)
+
 # Introduction
 
 This project is meant to quickly spin up an optimally configured
