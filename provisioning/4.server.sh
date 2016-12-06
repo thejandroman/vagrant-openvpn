@@ -48,7 +48,7 @@ if [ ! -e "${KEY_DIR}/dh2048.pem" ]
 then
     prep_rsa
     echo 'Building dhparam (can take a while)...'
-    ./build-dh >/dev/null 2>&1
+    $OPENSSL dhparam -dsaparam -out "${KEY_DIR}/dh${KEY_SIZE}.pem" "${KEY_SIZE}"
 fi
 
 if [ ! -e "${KEY_DIR}/ta.key" ]

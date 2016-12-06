@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - moved config options from Vagrantfile to new config.yaml
 - Retrieving the IP from metadata can now be extended with multiple clouds
 - Refactor Vagrantfile for modularity
+- Use `dsaparam` during dhparam generation for faster initial server
+  creation
 
 ## [16.04-1.0.0]
 ### Changed
