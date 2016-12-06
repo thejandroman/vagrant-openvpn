@@ -47,12 +47,14 @@ cp /vagrant/provisioning/client.conf /root/client_base.conf
 
 prep_rsa
 
+mkdir -p $CLIENT_CONFIGS
+
 i=1
 while [ $i -le "${CLIENTS}" ]; do
     CLIENT="client${i}"
     i=$((i+1))
 
-    if ! $force && [ -e "/vagrant/client-configs/${CLIENT}.ovpn" ]; then
+    if ! $force && [ -e "${CLIENT_CONFIGS}/${CLIENT}.ovpn" ]; then
         echo "Skipped ${CLIENT} ovpn files."
         continue
     fi
