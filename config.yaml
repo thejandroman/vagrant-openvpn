@@ -35,3 +35,7 @@ do_ssh_key_name: vagrant
 # take precedence over the do_token_file key.
 do_token: 1234567890abcdef
 #do_token_file: ~/.do
+
+ls_bundle_id: nano_1_0
+ls_region: us-east-1
+ls_ssh_key_name: vagrant_gh
