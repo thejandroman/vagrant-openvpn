@@ -25,6 +25,19 @@ def digital_ocean(config, options)
   end
 end
 
+def lightsail(config, options)
+  config.vm.provider :lightsail do |provider, override|
+    override.ssh.username = 'ubuntu'
+    override.vm.box       = 'lightsail'
+    override.vm.box_url   = 'https://github.com/thejandroman/vagrant-lightsail/raw/master/box/lightsail.box'
+
+    provider.blueprint_id = 'ubuntu_16_04'
+    provider.bundle_id    = options[:BUNDLE_ID]
+    provider.keypair_name = options[:SSH_KEY_NAME]
+    provider.region       = options[:REGION]
+  end
+end
+
 VAGRANTFILE_API_VERSION = '2'.freeze
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'openvpn' do |name|
@@ -42,6 +55,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       TOKEN:        vagrant_config['do_token'] ? vagrant_config['do_token'] : File.read(File.expand_path(vagrant_config['do_token_file'])).chomp
     )
     digital_ocean(config, do_options)
+  when :lightsail
+    ls_options = options.merge(
+      BUNDLE_ID:    vagrant_config['ls_bundle_id'],
+      SSH_KEY_NAME: vagrant_config['ls_ssh_key_name'],
+      REGION:       vagrant_config['ls_region']
+    )
+    lightsail(config, ls_options)
   else
     abort('Unsupported provider')
   end
