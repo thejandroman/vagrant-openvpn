@@ -13,7 +13,6 @@ options = {
 
 def digital_ocean(config, options)
   config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = options[:SSH_KEY]
     override.vm.box               = 'digital_ocean'
     override.vm.box_url           = 'https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box'
 
@@ -31,6 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'openvpn' do |name|
     name.vm.hostname = 'openvpn'
   end
+
+  config.ssh.private_key_path = options[:SSH_KEY]
 
   case options[:PROVIDER]
   when :digital_ocean
