@@ -34,6 +34,7 @@ def lightsail(config, options)
     provider.blueprint_id = 'ubuntu_16_04'
     provider.bundle_id    = options[:BUNDLE_ID]
     provider.keypair_name = options[:SSH_KEY_NAME]
+    provider.port_info    = [{ from_port: 443, protocol: 'tcp', to_port: 443 }]
     provider.region       = options[:REGION]
   end
 end
