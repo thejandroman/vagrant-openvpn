@@ -4,25 +4,38 @@
 require 'yaml'
 
 vagrant_config = YAML.load_file('./config.yaml')
-options = {
-  PROVIDER: vagrant_config['provider'].to_sym,
-  CLIENTS:  vagrant_config['clients'],
-  FORCE:    vagrant_config['force'],
-  SSH_KEY:  vagrant_config['ssh_private_key']
-}
 
-def digital_ocean(config, options)
+def digital_ocean(config, opts) # rubocop:disable Metrics/AbcSize
+  token = if vagrant_config['do']['token']
+            vagrant_config['do']['token']
+          else
+            File.read(File.expand_path(vagrant_config['do']['token_file'])).chomp
+          end
+
   config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = options[:SSH_KEY]
     override.vm.box               = 'digital_ocean'
     override.vm.box_url           = 'https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box'
 
     provider.image        = 'ubuntu-16-04-x64'
     provider.name         = 'openvpn'
-    provider.region       = options[:REGION]
-    provider.ssh_key_name = options[:SSH_KEY_NAME]
-    provider.size         = options[:SIZE]
-    provider.token        = options[:TOKEN]
+    provider.region       = opts['region']
+    provider.size         = opts['size']
+    provider.ssh_key_name = opts['ssh_key_name']
+    provider.token        = token
+  end
+end
+
+def lightsail(config, opts)
+  config.vm.provider :lightsail do |provider, override|
+    override.ssh.username = 'ubuntu'
+    override.vm.box       = 'lightsail'
+    override.vm.box_url   = 'https://github.com/thejandroman/vagrant-lightsail/raw/master/box/lightsail.box'
+
+    provider.blueprint_id = 'ubuntu_16_04'
+    provider.bundle_id    = opts['bundle_id']
+    provider.keypair_name = opts['ssh_key_name']
+    provider.port_info    = [{ from_port: 443, protocol: 'tcp', to_port: 443 }]
+    provider.region       = opts['region']
   end
 end
 
@@ -32,15 +45,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     name.vm.hostname = 'openvpn'
   end
 
-  case options[:PROVIDER]
+  config.ssh.private_key_path = vagrant_config['ssh_private_key']
+
+  case vagrant_config['provider'].to_sym
   when :digital_ocean
-    do_options = options.merge(
-      REGION:       vagrant_config['do_region'],
-      SIZE:         vagrant_config['do_size'],
-      SSH_KEY_NAME: vagrant_config['do_ssh_key_name'],
-      TOKEN:        vagrant_config['do_token'] ? vagrant_config['do_token'] : File.read(File.expand_path(vagrant_config['do_token_file'])).chomp
-    )
-    digital_ocean(config, do_options)
+    digital_ocean(config, vagrant_config['do'])
+  when :lightsail
+    lightsail(config, vagrant_config['ls'])
   else
     abort('Unsupported provider')
   end
@@ -54,6 +65,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision 'shell', path: 'provisioning/3.firewall.sh'
   config.vm.provision 'shell', path: 'provisioning/4.server.sh'
 
-  args = options[:FORCE] ? ["-c #{options[:CLIENTS]}", '-f'] : ["-c #{options[:CLIENTS]}"]
+  args = vagrant_config['force'] ? ["-c #{vagrant_config['clients']}", '-f'] : ["-c #{vagrant_config['clients']}"]
   config.vm.provision 'shell', path: 'provisioning/5.client.sh', args: args
 end

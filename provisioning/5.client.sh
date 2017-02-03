@@ -18,7 +18,8 @@ done
 shift $((OPTIND-1))
 
 ipaddr() {
-    URLS=( http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address )
+    URLS=( http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address \
+           http://169.254.169.254/latest/meta-data/public-ipv4 )
 
     for i in "${URLS[@]}"; do
         status_code=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' "${i}")

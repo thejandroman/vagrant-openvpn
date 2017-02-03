@@ -1,6 +1,8 @@
 ---
-# Vagrant provider. Currently only supports digital_ocean
-provider: digital_ocean
+# Vagrant provider. Currently supports:
+# - digital_ocean
+# - lightsail
+provider: lightsail
 
 # Number of client OVPN config files to create
 clients: 2
@@ -12,26 +14,55 @@ force: true
 ssh_private_key: ~/.ssh/id_rsa
 
 ### DIGITAL OCEAN SPECIFIC SETTINGS
-# DigitalOcean region in which to create the server instance. A list
-# of regions and their current status can be found at
-# https://status.digitalocean.com/.
-do_region: nyc3
+do:
+  # DigitalOcean region in which to create the server instance. A list
+  # of regions and their current status can be found at
+  # https://status.digitalocean.com/.
+  region: sfo2
 
-# Size of the server instance. This setting directly correlates with
-# the memory size at https://www.digitalocean.com/pricing/.
-#
-# WARNING: Changing this value will have a direct effect on the fees
-# paid to DigitalOcean.
-do_size: 512mb
+  # Size of the server instance. This setting directly correlates with
+  # the memory size at https://www.digitalocean.com/pricing/.
+  #
+  # WARNING: Changing this value will have a direct effect on the fees
+  # paid to DigitalOcean.
+  size: 512mb
 
-# The name to use when creating a DigitalOcean SSH key for Droplet
-# authentication
-do_ssh_key_name: vagrant
+  # The name to use when creating an SSH key for authentication
+  ssh_key_name: vagrant_gh
 
-# The digital ocean token. This can be acquired at
-# https://cloud.digitalocean.com/settings/api/tokens. Alternatively
-# the path to a one line file containing the access token can be
-# provided using the do_token_file key. The do_token key will always
-# take precedence over the do_token_file key.
-do_token: 1234567890abcdef
-#do_token_file: ~/.do
+  # The digital ocean token. This can be acquired at
+  # https://cloud.digitalocean.com/settings/api/tokens. Alternatively
+  # the path to a one line file containing the access token can be
+  # provided using the do_token_file key. The do_token key will always
+  # take precedence over the do_token_file key.
+  token: 1234567890abcdef
+  #token_file: ~/.do
+
+### AMAZON LIGHTSAIL SPECIFIC SETTINGS
+ls:
+
+  # Size of the server instance bundle. This setting directly
+  # correlates with pricing at https://amazonlightsail.com/pricing/. A
+  # list of available bundles is only exposed by Amazon via their
+  # API. If the AWS CLI is installed and configured: `aws lightsail
+  # get-bundles`.
+  #
+  # WARNING: Changing this value will have a direct effect on the fees
+  # paid to Amazon.
+  bundle_id: nano_1_0
+
+  # The name to use when creating an SSH key for authentication
+  ssh_key_name: vagrant_gh
+
+  # Amazon region in which to create the server instance. A list of
+  # available regions is only exposed by Amazon via their API. If the
+  # AWS CLI is installed and configured: `aws lightsail get-regions`
+  region: us-east-1
+
+  # Amazon credentials. This can be acquired at
+  # https://console.aws.amazon.com/iam/home?#/security_credential. Alternatively
+  # these settings can be removed from this config file and AWS names
+  # profiles will be used instead; see
+  # https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files.
+  access_key_id: 1234567890abcdef
+  secret_access_key: 1234567890abcdef
