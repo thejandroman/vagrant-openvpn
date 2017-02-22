@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [16.04-3.0.1] - 21/02/2017
+### Changed
+- Fixed digital ocean function
+
 ## [16.04-3.0.0] - 03/02/2017
 ### Added
 - Basic travis testing using rubocop and shellcheck

@@ -6,10 +6,10 @@ require 'yaml'
 vagrant_config = YAML.load_file('./config.yaml')
 
 def digital_ocean(config, opts) # rubocop:disable Metrics/AbcSize
-  token = if vagrant_config['do']['token']
-            vagrant_config['do']['token']
+  token = if opts['token']
+            opts['token']
           else
-            File.read(File.expand_path(vagrant_config['do']['token_file'])).chomp
+            File.read(File.expand_path(opts['token_file'])).chomp
           end
 
   config.vm.provider :digital_ocean do |provider, override|
