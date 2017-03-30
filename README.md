@@ -19,6 +19,8 @@ following functions:
 
 # Prerequisites
 
+1. Install [vagrant](https://www.vagrantup.com/downloads.html)
+
 1. Install vagrant plugins
 
     - [vagrant-rsync-back](https://github.com/smerrill/vagrant-rsync-back) Used
