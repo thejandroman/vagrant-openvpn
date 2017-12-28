@@ -31,14 +31,14 @@ following functions:
       vagrant plugin install vagrant-rsync-back
       ```
 
-    - [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean) Only
+    - [vagrant-digitalocean](https://github.com/devopsgroup-io/vagrant-digitalocean) Only
       required if using the DigitalOcean cloud provider.
 
       ```sh
       vagrant plugin install vagrant-digitalocean
       ```
 
-    - [vagrant-lightsail](https://github.com/devopsgroup-io/vagrant-digitalocean) Only
+    - [vagrant-lightsail](https://github.com/thejandroman/vagrant-lightsail) Only
       required if using the Amazon Lightsail cloud provider.
 
       ```sh
