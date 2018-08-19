@@ -17,6 +17,7 @@ then
 fi
 
 /bin/sed -ie 's/KEY_NAME="EasyRSA"/KEY_NAME="server"/' "${RSA_DIR}/vars"
+/bin/sed -ie 's/export KEY_SIZE=2048/export KEY_SIZE=4096/' "${RSA_DIR}/vars"
 
 if [ ! -e "${KEY_DIR}/ca.crt" ] \
        || [ ! -e "${KEY_DIR}/server.key" ] \
