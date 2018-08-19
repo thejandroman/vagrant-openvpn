@@ -14,18 +14,11 @@ force: true
 ssh_private_key: ~/.ssh/id_rsa
 
 ### DIGITAL OCEAN SPECIFIC SETTINGS
-do:
+digital_ocean:
   # DigitalOcean region in which to create the server instance. A list
   # of regions and their current status can be found at
   # https://status.digitalocean.com/.
-  region: sfo2
-
-  # Size of the server instance. This setting directly correlates with
-  # the memory size at https://www.digitalocean.com/pricing/.
-  #
-  # WARNING: Changing this value will have a direct effect on the fees
-  # paid to DigitalOcean.
-  size: 512mb
+  region: nyc3
 
   # The name to use when creating an SSH key for authentication
   ssh_key_name: vagrant_gh
@@ -39,24 +32,13 @@ do:
   #token_file: ~/.do
 
 ### AMAZON LIGHTSAIL SPECIFIC SETTINGS
-ls:
-
-  # Size of the server instance bundle. This setting directly
-  # correlates with pricing at https://amazonlightsail.com/pricing/. A
-  # list of available bundles is only exposed by Amazon via their
-  # API. If the AWS CLI is installed and configured: `aws lightsail
-  # get-bundles`.
-  #
-  # WARNING: Changing this value will have a direct effect on the fees
-  # paid to Amazon.
-  bundle_id: nano_1_0
-
+lightsail:
   # The name to use when creating an SSH key for authentication
   ssh_key_name: vagrant_gh
 
-  # Amazon region in which to create the server instance. A list of
-  # available regions is only exposed by Amazon via their API. If the
-  # AWS CLI is installed and configured: `aws lightsail get-regions`
+  # Amazon region in which to create the server instance. A list of available
+  # regions can be found at:
+  # https://docs.aws.amazon.com/general/latest/gr/rande.html#lightsail_region
   region: us-east-1
 
   # Amazon credentials. This can be acquired at

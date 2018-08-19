@@ -19,7 +19,7 @@ def digital_ocean(config, opts) # rubocop:disable Metrics/AbcSize
     provider.image        = 'ubuntu-16-04-x64'
     provider.name         = 'openvpn'
     provider.region       = opts['region']
-    provider.size         = opts['size']
+    provider.size         = '512mb'
     provider.ssh_key_name = opts['ssh_key_name']
     provider.token        = token
   end
@@ -32,7 +32,7 @@ def lightsail(config, opts)
     override.vm.box_url   = 'https://github.com/thejandroman/vagrant-lightsail/raw/master/box/lightsail.box'
 
     provider.blueprint_id = 'ubuntu_16_04'
-    provider.bundle_id    = opts['bundle_id']
+    provider.bundle_id    = 'nano_1_0'
     provider.keypair_name = opts['ssh_key_name']
     provider.port_info    = [{ from_port: 443, protocol: 'tcp', to_port: 443 }]
     provider.region       = opts['region']
@@ -49,9 +49,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   case vagrant_config['provider'].to_sym
   when :digital_ocean
-    digital_ocean(config, vagrant_config['do'])
+    digital_ocean(config, vagrant_config['digital_ocean'])
   when :lightsail
-    lightsail(config, vagrant_config['ls'])
+    lightsail(config, vagrant_config['lightsail'])
   else
     abort('Unsupported provider')
   end
