@@ -1,5 +1,8 @@
 #!/bin/bash
 
+wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg|apt-key add -
+echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+
 /usr/bin/apt-get -qq update
 
 install_package() {
