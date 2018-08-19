@@ -15,7 +15,7 @@ before_install:
 install: gem install rubocop
 
 script:
-  - "docker run -v $(pwd):/scripts koalaman/shellcheck /scripts/provisioning/*.sh"
+  - "for file in $(find . -type f -name *.sh); do docker run -v $(pwd):/scripts koalaman/shellcheck /scripts/$file; done"
   - rubocop -SD Vagrantfile
 
 matrix:
