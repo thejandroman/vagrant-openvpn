@@ -1,22 +1,21 @@
 ---
 language: ruby
 
-sudo: false
+sudo: required
 
 rvm:
   - 2.2.5
 
-addons:
-  apt:
-    sources:
-      - debian-sid
-    packages:
-      - shellcheck
+services:
+  - docker
+
+before_install:
+  - docker pull koalaman/shellcheck
 
 install: gem install rubocop
 
 script:
-  - bash -c 'shopt -s globstar; shellcheck **/*.sh'
+  - "docker run -v $(pwd):/scripts koalaman/shellcheck /scripts/bing-wallpaper.sh"
   - rubocop -SD Vagrantfile
 
 matrix:
