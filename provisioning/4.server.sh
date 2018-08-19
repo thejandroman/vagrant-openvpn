@@ -44,11 +44,11 @@ then
     ./build-key-server --batch server >/dev/null 2>&1
 fi
 
-if [ ! -e "${KEY_DIR}/dh2048.pem" ]
+if [ ! -e "${KEY_DIR}/dhparams.pem" ]
 then
     prep_rsa
     echo 'Building dhparam (can take a while)...'
-    $OPENSSL dhparam -dsaparam -out "${KEY_DIR}/dh${KEY_SIZE}.pem" "${KEY_SIZE}"
+    $OPENSSL dhparam -dsaparam -out "${KEY_DIR}/dhparams.pem" "${KEY_SIZE}"
 fi
 
 if [ ! -e "${KEY_DIR}/ta.key" ]
@@ -57,7 +57,7 @@ then
 fi
 
 cd "${KEY_DIR}" || exit
-cp -f ca.crt ca.key server.crt server.key ta.key dh2048.pem "${OPENVPN_DIR}"
+cp -f ca.crt ca.key server.crt server.key ta.key dhparams.pem "${OPENVPN_DIR}"
 
 cp /vagrant/provisioning/server.conf "${SERVER_CONF}"
 
