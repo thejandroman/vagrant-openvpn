@@ -35,6 +35,27 @@ def lightsail(config, opts)
   end
 end
 
+def azure(config, opts)
+  config.vm.provider :azure do |provider, override|
+    override.ssh.username = 'ubuntu'
+    override.vm.box       = 'azure'
+    override.vm.box_url   = 'https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box'
+
+    provider.tenant_id       = opts['tenant_id']
+    provider.client_id       = opts['client_id']
+    provider.client_secret   = opts['client_secret']
+    provider.subscription_id = opts['subscription_id']
+
+    provider.vm_name        = 'openvpn-jandro'
+    provider.vm_size        = 'Standard_B1s'
+    provider.admin_username = 'ubuntu'
+    provider.location       = opts['location']
+
+    provider.vm_image_urn  = 'Canonical:UbuntuServer:16.04-LTS:latest'
+    provider.tcp_endpoints = '443'
+  end
+end
+
 VAGRANTFILE_API_VERSION = '2'.freeze
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'openvpn' do |name|
@@ -48,6 +69,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     digital_ocean(config, vagrant_config['digital_ocean'])
   when :lightsail
     lightsail(config, vagrant_config['lightsail'])
+  when :azure
+    azure(config, vagrant_config['azure'])
   else
     abort('Unsupported provider')
   end
