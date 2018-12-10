@@ -84,6 +84,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision 'shell', path: 'provisioning/3.firewall.sh'
   config.vm.provision 'shell', path: 'provisioning/4.server.sh'
 
-  args = vagrant_config['force'] ? ["-c #{vagrant_config['clients']}", '-f'] : ["-c #{vagrant_config['clients']}"]
+  args = if vagrant_config['force']
+           ["-c #{vagrant_config['clients']}", "-p#{vagrant_config['provider']}", '-f']
+         else
+           ["-c #{vagrant_config['clients']}", "-p#{vagrant_config['provider']}"]
+         end
   config.vm.provision 'shell', path: 'provisioning/5.client.sh', args: args
 end

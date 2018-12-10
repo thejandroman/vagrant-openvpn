@@ -1,12 +1,14 @@
 #!/bin/bash -x
 
 force=false
-while getopts ":c:f" opt; do
+while getopts ":c:p:f" opt; do
     case $opt in
         c)
             CLIENTS=$OPTARG ;;
         f)
             force=true ;;
+        p)
+            PROVIDER="${OPTARG}" ;;
         \?)
             echo "Invalid argument: -${OPTARG}" >&2 &&
                 exit 1 ;;
@@ -19,12 +21,21 @@ shift $((OPTIND-1))
 
 ipaddr() {
     URLS=( http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address \
-           http://169.254.169.254/latest/meta-data/public-ipv4 )
+           http://169.254.169.254/latest/meta-data/public-ipv4 \
+           "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-08-01&format=text" )
+
+    if  [ "$PROVIDER" = "azure" ]; then
+        CURL_CODE_CMD="curl -H Metadata:true"
+        CURL_CMD="curl -H Metadata:true"
+    else
+        CURL_CODE_CMD="curl --head"
+        CURL_CMD="curl"
+    fi
 
     for i in "${URLS[@]}"; do
-        status_code=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' "${i}")
-        if [ "${status_code}" -ne '404' ]; then
-            ip_addr=$(curl -s "${i}")
+        status_code=$($CURL_CODE_CMD -o /dev/null -s --write-out '%{http_code}\n' "${i}")
+        if [ "${status_code}" -ne '404' ] && [ "${status_code}" -ne '400' ]; then
+            ip_addr=$($CURL_CMD -s "${i}")
             break
         fi
     done
