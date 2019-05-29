@@ -15,7 +15,7 @@ def digital_ocean(config, opts)
     provider.image        = 'ubuntu-16-04-x64'
     provider.name         = 'openvpn'
     provider.region       = opts['region']
-    provider.size         = '512mb'
+    provider.size         = 's-1vcpu-1gb'
     provider.ssh_key_name = opts['ssh_key_name']
     provider.token        = token
   end
@@ -28,7 +28,7 @@ def lightsail(config, opts)
     override.vm.box_url   = 'https://github.com/thejandroman/vagrant-lightsail/raw/master/box/lightsail.box'
 
     provider.blueprint_id = 'ubuntu_16_04'
-    provider.bundle_id    = 'nano_1_0'
+    provider.bundle_id    = 'nano_2_0'
     provider.keypair_name = opts['ssh_key_name']
     provider.port_info    = [{ from_port: 443, protocol: 'tcp', to_port: 443 }]
     provider.region       = opts['region']
